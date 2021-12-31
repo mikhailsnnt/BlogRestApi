@@ -3,6 +3,7 @@ package com.sainnt.blogrestapi.controller;
 import com.sainnt.blogrestapi.dto.PostDto;
 import com.sainnt.blogrestapi.dto.PostResponse;
 import com.sainnt.blogrestapi.service.PostService;
+import com.sainnt.blogrestapi.utils.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,10 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity <PostResponse> getAllPosts(
-            @RequestParam(value = "pageNumber",defaultValue = "0",required = false) int pageNumber,
-            @RequestParam(value = "pageSize",defaultValue = "10",required = false) int pageSize,
-            @RequestParam(value = "sortBy",defaultValue = "id",required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc",required = false) String sortDir
+            @RequestParam(value = "pageNumber",defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,
+            @RequestParam(value = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIR,required = false) String sortDir
     ){
         return ResponseEntity.ok( postService.getAllPosts(pageNumber,pageSize,sortBy,sortDir));
     }
