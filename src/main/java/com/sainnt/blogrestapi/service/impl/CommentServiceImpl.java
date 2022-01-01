@@ -8,6 +8,7 @@ import com.sainnt.blogrestapi.exception.ResourceNotFoundException;
 import com.sainnt.blogrestapi.repository.CommentRepository;
 import com.sainnt.blogrestapi.repository.PostRepository;
 import com.sainnt.blogrestapi.service.CommentService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,13 @@ public class CommentServiceImpl implements CommentService {
 
     private CommentRepository commentRepository;
     private PostRepository postRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository, ModelMapper modelMapper) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -62,16 +65,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private CommentDto mapToDto(Comment comment){
-        return new CommentDto(comment.getId(), comment.getName(), comment.getEmail(), comment.getBody());
+        return modelMapper.map(comment,CommentDto.class);
     }
 
     private Comment mapToEntity(CommentDto commentDto){
-        Comment comment = new Comment();
-        comment.setId(commentDto.getId());
-        comment.setName(commentDto.getName());
-        comment.setEmail(commentDto.getEmail());
-        comment.setBody(commentDto.getBody());
-        return comment;
+        return modelMapper.map(commentDto, Comment.class);
     }
 
     private Comment getCommentWithinPost(long postId, long commentId){
