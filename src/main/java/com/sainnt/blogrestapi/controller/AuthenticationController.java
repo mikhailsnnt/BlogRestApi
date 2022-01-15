@@ -1,5 +1,6 @@
 package com.sainnt.blogrestapi.controller;
 
+import com.sainnt.blogrestapi.dto.JwtAuthenticationTokenDto;
 import com.sainnt.blogrestapi.dto.LoginDto;
 import com.sainnt.blogrestapi.dto.SignupDto;
 import com.sainnt.blogrestapi.service.AuthenticationService;
@@ -20,9 +21,8 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginDto loginDto){
-        authenticationService.login(loginDto);
-        return ResponseEntity.ok("Logged in successfully");
+    public ResponseEntity<JwtAuthenticationTokenDto> login(@Valid @RequestBody LoginDto loginDto){
+        return ResponseEntity.ok(authenticationService.login(loginDto));
     }
 
     @PostMapping(path = "/signup")

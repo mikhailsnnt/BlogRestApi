@@ -1,12 +1,13 @@
 package com.sainnt.blogrestapi.service.impl;
 
+import com.sainnt.blogrestapi.dto.JwtAuthenticationTokenDto;
 import com.sainnt.blogrestapi.dto.LoginDto;
 import com.sainnt.blogrestapi.dto.SignupDto;
-import com.sainnt.blogrestapi.entity.Role;
 import com.sainnt.blogrestapi.entity.User;
 import com.sainnt.blogrestapi.exception.ResourceNotFoundException;
 import com.sainnt.blogrestapi.repository.RoleRepository;
 import com.sainnt.blogrestapi.repository.UserRepository;
+import com.sainnt.blogrestapi.security.JwtTokenProvider;
 import com.sainnt.blogrestapi.service.AuthenticationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,14 +28,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper mapper;
+    private final JwtTokenProvider tokenProvider;
 
     @Autowired
-    public AuthenticationServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ModelMapper mapper) {
+    public AuthenticationServiceImpl(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ModelMapper mapper, JwtTokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.mapper = mapper;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
@@ -49,9 +51,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void login(LoginDto loginDto) {
+    public JwtAuthenticationTokenDto login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = tokenProvider.generateToken(authentication);
+        return new JwtAuthenticationTokenDto(token);
     }
 
     @Override
