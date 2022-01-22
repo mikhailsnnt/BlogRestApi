@@ -2,6 +2,9 @@ package com.sainnt.blogrestapi.controller;
 
 import com.sainnt.blogrestapi.dto.CommentDto;
 import com.sainnt.blogrestapi.service.CommentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/posts/{postId}/comments")
+@SecurityRequirement(name = "Authorization")
 public class CommentController {
     private CommentService commentService;
 
