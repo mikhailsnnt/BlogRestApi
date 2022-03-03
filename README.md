@@ -2,7 +2,7 @@
 
 
 ## Motivation
-This application is __blog REST service__. Wich was inspired by Spring RESTful Web Service course on Udemy. 
+This application is __blog REST service__. Wich was inspired by _Spring RESTful Web Services_ course on Udemy. 
 
 ## Technology stack
 __Java 17__, 
